@@ -894,6 +894,117 @@
                 font-size: 1.7rem;
             }
         }
+        /* Curseur personnalisé */
+        * { cursor: none !important; }
+
+        #cursor {
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+        }
+
+        #cursor-ring {
+            width: 36px;
+            height: 36px;
+            border: 1.5px solid rgba(0, 255, 148, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            transition: transform 0.12s ease, width 0.2s ease, height 0.2s ease;
+        }
+
+        /* Typing cursor */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 0.85em;
+            background: var(--accent);
+            margin-left: 4px;
+            vertical-align: middle;
+            animation: blink-cursor 0.8s step-end infinite;
+        }
+
+        @keyframes blink-cursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* CGV */
+        .cgv {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 3rem;
+            text-align: center;
+        }
+
+        .cgv-toggle {
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 0.8rem;
+            cursor: none;
+            text-decoration: underline;
+            margin-bottom: 1rem;
+            transition: color 0.3s;
+        }
+
+        .cgv-toggle:hover { color: var(--accent); }
+
+        .cgv-content {
+            display: none;
+            text-align: left;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 2rem;
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cgv-content h4 {
+            color: var(--text);
+            font-size: 0.9rem;
+            margin: 1.2rem 0 0.4rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .cgv-content h4:first-child { margin-top: 0; }
+
+        /* Paiement info */
+        .tarifs-info {
+            text-align: center;
+            margin-top: 2.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .tarifs-info span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .tarifs-info span::before {
+            content: '✓';
+            color: var(--accent);
+        }
+
         /* Code Background */
         #code-bg {
             position: fixed;
@@ -914,6 +1025,8 @@
 </head>
 <body>
     <canvas id="code-bg"></canvas>
+    <div id="cursor"></div>
+    <div id="cursor-ring"></div>
     <nav>
         <div class="nav-container">
             <div class="logo">ZUMA</div>
@@ -934,7 +1047,7 @@
             </div>
             <div class="hero-label">Zuma Développement</div>
             <h1>
-                <span class="gradient-text">Hub Développement</span>
+                <span class="gradient-text" id="typing-title"></span><span class="typing-cursor" id="typing-cursor"></span>
             </h1>
             <p class="hero-description">
                 Scripts, mods et outils sur mesure pour FiveM, Minecraft, Roblox, Discord et le web.
@@ -946,15 +1059,15 @@
 
             <div class="stats">
                 <div class="stat-item">
-                    <span class="stat-number">104+</span>
+                    <span class="stat-number" data-target="104" data-suffix="+">0</span>
                     <div class="stat-label">Projets réalisés</div>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">6</span>
+                    <span class="stat-number" data-target="6" data-suffix="">0</span>
                     <div class="stat-label">Ans d'expérience</div>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">67+</span>
+                    <span class="stat-number" data-target="67" data-suffix="+">0</span>
                     <div class="stat-label">Clients satisfaits</div>
                 </div>
             </div>
@@ -1262,6 +1375,11 @@
                     <a href="#" class="social-link">Portfolio</a>
                 </div>
             </div>
+            <div class="tarifs-info">
+                <span>Paiement avant livraison</span>
+                <span>Paiement via PayPal</span>
+                <span>Devis gratuit</span>
+            </div>
         </div>
     </section>
 
@@ -1269,6 +1387,25 @@
 
     <footer>
         <p>© 2026 Zuma Développement. Fait avec passion.</p>
+        <div class="cgv">
+            <button class="cgv-toggle" onclick="document.getElementById('cgv-content').style.display = document.getElementById('cgv-content').style.display === 'block' ? 'none' : 'block'">
+                Conditions Générales de Vente
+            </button>
+            <div class="cgv-content" id="cgv-content">
+                <h4>1. Paiement</h4>
+                <p>Le paiement intégral est exigé avant toute livraison. Le paiement s'effectue via PayPal. Aucun remboursement ne sera accordé une fois le travail livré.</p>
+                <h4>2. Livraison</h4>
+                <p>Le délai de livraison est communiqué avant le début du projet. Zuma Développement s'engage à respecter ce délai sauf cas de force majeure.</p>
+                <h4>3. Modifications</h4>
+                <p>Des retouches mineures sont incluses dans le tarif. Toute modification majeure fera l'objet d'un devis supplémentaire.</p>
+                <h4>4. Propriété</h4>
+                <p>Une fois le paiement effectué, le client est propriétaire du projet livré. Zuma Développement se réserve le droit de présenter le projet dans son portfolio.</p>
+                <h4>5. Responsabilité</h4>
+                <p>Zuma Développement ne peut être tenu responsable de l'utilisation faite du projet par le client après livraison.</p>
+                <h4>6. Contact</h4>
+                <p>Pour toute question : zuma.developpement@gmail.com ou via Discord.</p>
+            </div>
+        </div>
     </footer>
 
     <script>
@@ -1307,6 +1444,66 @@
             btn.textContent = 'Envoyer le message →';
             btn.disabled = false;
         });
+
+        // Curseur personnalisé
+        const cursor = document.getElementById('cursor');
+        const cursorRing = document.getElementById('cursor-ring');
+        let ringX = 0, ringY = 0;
+        document.addEventListener('mousemove', e => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            ringX += (e.clientX - ringX) * 0.15;
+            ringY += (e.clientY - ringY) * 0.15;
+            cursorRing.style.left = e.clientX + 'px';
+            cursorRing.style.top = e.clientY + 'px';
+        });
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.8)';
+                cursorRing.style.transform = 'translate(-50%, -50%) scale(1.4)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
+            });
+        });
+
+        // Typing effect
+        const typingEl = document.getElementById('typing-title');
+        const typingCursor = document.getElementById('typing-cursor');
+        const typingText = 'Hub Développement';
+        let typingIndex = 0;
+        function typeText() {
+            if (typingIndex < typingText.length) {
+                typingEl.textContent += typingText[typingIndex];
+                typingIndex++;
+                setTimeout(typeText, 80);
+            } else {
+                setTimeout(() => { typingCursor.style.display = 'none'; }, 1500);
+            }
+        }
+        setTimeout(typeText, 600);
+
+        // Compteur animé sur les stats
+        const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+        const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseInt(el.dataset.target);
+                    const suffix = el.dataset.suffix;
+                    let current = 0;
+                    const step = Math.ceil(target / 60);
+                    const interval = setInterval(() => {
+                        current = Math.min(current + step, target);
+                        el.textContent = current + suffix;
+                        if (current >= target) clearInterval(interval);
+                    }, 25);
+                    statObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        statNumbers.forEach(el => statObserver.observe(el));
 
         // Skill bars animation on scroll
         const bars = document.querySelectorAll('.skill-bar-fill');
