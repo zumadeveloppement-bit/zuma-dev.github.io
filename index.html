@@ -894,33 +894,6 @@
                 font-size: 1.7rem;
             }
         }
-        /* Curseur personnalisé */
-        * { cursor: none !important; }
-
-        #cursor {
-            width: 12px;
-            height: 12px;
-            background: var(--accent);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 99999;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease, width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
-        }
-
-        #cursor-ring {
-            width: 36px;
-            height: 36px;
-            border: 1.5px solid rgba(0, 255, 148, 0.5);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 99998;
-            transform: translate(-50%, -50%);
-            transition: transform 0.12s ease, width 0.2s ease, height 0.2s ease;
-        }
-
         /* Typing cursor */
         .typing-cursor {
             display: inline-block;
@@ -1025,8 +998,6 @@
 </head>
 <body>
     <canvas id="code-bg"></canvas>
-    <div id="cursor"></div>
-    <div id="cursor-ring"></div>
     <nav>
         <div class="nav-container">
             <div class="logo">ZUMA</div>
@@ -1443,29 +1414,6 @@
             }
             btn.textContent = 'Envoyer le message →';
             btn.disabled = false;
-        });
-
-        // Curseur personnalisé
-        const cursor = document.getElementById('cursor');
-        const cursorRing = document.getElementById('cursor-ring');
-        let ringX = 0, ringY = 0;
-        document.addEventListener('mousemove', e => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            ringX += (e.clientX - ringX) * 0.15;
-            ringY += (e.clientY - ringY) * 0.15;
-            cursorRing.style.left = e.clientX + 'px';
-            cursorRing.style.top = e.clientY + 'px';
-        });
-        document.querySelectorAll('a, button').forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                cursor.style.transform = 'translate(-50%, -50%) scale(1.8)';
-                cursorRing.style.transform = 'translate(-50%, -50%) scale(1.4)';
-            });
-            el.addEventListener('mouseleave', () => {
-                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-                cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
-            });
         });
 
         // Typing effect
