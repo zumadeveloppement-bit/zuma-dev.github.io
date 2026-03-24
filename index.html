@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zuma Développement • Hub Développement</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0A0A0A;
+            --surface: #141414;
+            --text: #FAFAFA;
+            --text-dim: #999999;
+            --accent: #00FF94;
+            --accent-dim: #00CC75;
+            --border: #2A2A2A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--text);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 255, 148, 0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.2); opacity: 0.15; }
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.2s;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+            letter-spacing: -0.03em;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.4s;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--text) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 700px;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.6s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: var(--bg);
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.8s;
+        }
+
+        .cta-button:hover {
+            background: var(--accent-dim);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 148, 0.3);
+        }
+
+        .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .cta-button:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-top: 6rem;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 1s;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        /* Projects Section */
+        .section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        .section-header {
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .project-image {
+            aspect-ratio: 16/10;
+            background: linear-gradient(135deg, #1A1A1A 0%, #2D2D2D 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 60%;
+            background: var(--accent);
+            opacity: 0.1;
+            filter: blur(60px);
+        }
+
+        .project-image.has-custom-bg::before {
+            display: none;
+        }
+
+        .project-image.has-custom-bg {
+            background-size: cover !important;
+            background-position: center !important;
+        }
+
+        .project-tag {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .project-info {
+            padding: 2rem;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.01em;
+        }
+
+        .project-description {
+            color: var(--text-dim);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tech-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.4rem 0.8rem;
+            background: rgba(0, 255, 148, 0.1);
+            color: var(--accent);
+            border-radius: 4px;
+        }
+
+        /* About Section */
+        .about-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: auto 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .about-avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+            box-shadow: 0 0 30px rgba(0, 255, 148, 0.2);
+            flex-shrink: 0;
+        }
+
+        .about-text p {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text p span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .skills-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .skill-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .skill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .skill-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--text);
+            font-weight: 600;
+        }
+
+        .skill-percent {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+        }
+
+        .skill-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 99px;
+            overflow: hidden;
+        }
+
+        .skill-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-dim), var(--accent));
+            border-radius: 99px;
+            width: 0%;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .about-avatar {
+                width: 120px;
+                height: 120px;
+            }
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: var(--surface);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .contact-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .contact-email {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--accent);
+            text-decoration: none;
+            display: inline-block;
+            margin: 2rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .contact-email:hover {
+            transform: translateY(-2px);
+            text-shadow: 0 0 20px rgba(0, 255, 148, 0.5);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .social-link {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: var(--accent);
+        }
+
+        /* Tarifs Section */
+        .tarifs-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        .tarifs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .tarif-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tarif-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .tarif-card.featured {
+            border-color: var(--accent);
+            box-shadow: 0 0 30px rgba(0, 255, 148, 0.12);
+        }
+
+        .tarif-badge {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.2rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--bg);
+            background: var(--accent);
+            padding: 0.3rem 0.7rem;
+            border-radius: 99px;
+        }
+
+        .tarif-icon {
+            font-size: 2rem;
+        }
+
+        .tarif-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .tarif-price {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .tarif-price span {
+            font-size: 1rem;
+            color: var(--text-dim);
+            font-weight: 400;
+        }
+
+        .tarif-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .tarif-features li {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .tarif-features li::before {
+            content: '✓';
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .tarif-cta {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.85rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            background: transparent;
+        }
+
+        .tarif-cta:hover {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .tarif-card.featured .tarif-cta {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .tarif-card.featured .tarif-cta:hover {
+            background: var(--accent-dim);
+        }
+
+        /* Contact Form */
+        .contact-form {
+            width: 100%;
+            max-width: 600px;
+            margin: 2.5rem auto 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-field label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .form-field input,
+        .form-field textarea {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.9rem 1.1rem;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            resize: none;
+        }
+
+        .form-field input:focus,
+        .form-field textarea:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 255, 148, 0.08);
+        }
+
+        .form-field input::placeholder,
+        .form-field textarea::placeholder {
+            color: #555;
+        }
+
+        .form-submit {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            background: var(--accent);
+            color: var(--bg);
+            font-weight: 700;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-submit:hover {
+            background: var(--accent-dim);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 148, 0.3);
+        }
+
+        .form-success {
+            display: none;
+            text-align: center;
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            padding: 1rem;
+            border: 1px solid var(--accent);
+            border-radius: 8px;
+            background: rgba(0, 255, 148, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        /* Back to top */
+        #back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 46px;
+            height: 46px;
+            background: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        #back-to-top.visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+
+        #back-to-top:hover {
+            background: var(--accent-dim);
+            box-shadow: 0 6px 20px rgba(0, 255, 148, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section {
+                padding: 4rem 1.5rem;
+            }
+        }
+        /* Code Background */
+        #code-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.06;
+        }
+
+        body > *:not(#code-bg):not(#back-to-top) {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="code-bg"></canvas>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">ZUMA</div>
+            <ul class="nav-links">
+                <li><a href="#projets">Projets</a></li>
+                <li><a href="#apropos">À propos</a></li>
+                <li><a href="#tarifs">Tarifs</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-label">Zuma Développement</div>
+            <h1>
+                <span class="gradient-text">Hub Développement</span>
+            </h1>
+            <p class="hero-description">
+                Scripts, mods et outils sur mesure pour FiveM, Minecraft, Roblox, Discord et le web.
+            </p>
+            <a href="#contact" class="cta-button">
+                Démarrer un projet
+                <span class="arrow">→</span>
+            </a>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number">104+</span>
+                    <div class="stat-label">Projets réalisés</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">6</span>
+                    <div class="stat-label">Ans d'expérience</div>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">67+</span>
+                    <div class="stat-label">Clients satisfaits</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projets" class="section">
+        <div class="section-header">
+            <div class="section-label">Portfolio</div>
+            <h2 class="section-title">Projets sélectionnés</h2>
+        </div>
+
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image has-custom-bg" style="background-image: url('./flashdream-project.png');">
+                    <div class="project-tag">FiveM</div>
+                </div>
+                <div class="project-info">
+                    <h3 class="project-title">FlashDream FA</h3>
+                    <p class="project-description">
+                        Serveur FiveM avec scripts personnalisés et système complet de roleplay immersif.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Lua</span>
+                        <span class="tech-tag">FiveM</span>
+                        <span class="tech-tag">MySQL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image has-custom-bg" style="background-image: url('./briagde-project.png');">
+                    <div class="project-tag">Discord & Web</div>
+                </div>
+                <div class="project-info">
+                    <h3 class="project-title">La Brigade</h3>
+                    <p class="project-description">
+                        Bot Discord multifonction avec outils de modération et système de gestion automatisée.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Discord.js</span>
+                    </div>
+                </div>
+            </div>
+
+<div class="project-card">
+                <div class="project-image has-custom-bg" style="background-image: url('./moonlight-project.png');">
+                    <div class="project-tag">FiveM</div>
+                </div>
+                <div class="project-info">
+                    <h3 class="project-title">MoonLight FA</h3>
+                    <p class="project-description">
+                        Serveur FiveM roleplay avec économie avancée, jobs personnalisés et système d'inventaire.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Lua</span>
+                        <span class="tech-tag">FiveM</span>
+                        <span class="tech-tag">MySQL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image has-custom-bg" style="background-image: url('./mysteria-project.png');">
+                    <div class="project-tag">Minecraft</div>
+                </div>
+                <div class="project-info">
+                    <h3 class="project-title">Mysteria</h3>
+                    <p class="project-description">
+                        Serveur Minecraft avec plugins personnalisés, quêtes dynamiques et système d'économie complexe.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">PHP</span>
+                        <span class="tech-tag">MySQL</span>
+                        <span class="tech-tag">Spigot</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image has-custom-bg" style="background-image: url('./nexus-project.png');">
+                    <div class="project-tag">Discord Bot</div>
+                </div>
+                <div class="project-info">
+                    <h3 class="project-title">Bot Nexus</h3>
+                    <p class="project-description">
+                        Bot Discord avancé avec commandes personnalisées, auto-modération et statistiques en temps réel.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Discord.js</span>
+                        <span class="tech-tag">MongoDB</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="apropos">
+        <div class="about-section">
+            <div class="section-header">
+                <div class="section-label">À propos</div>
+                <h2 class="section-title">Qui suis-je ?</h2>
+            </div>
+            <div class="about-grid">
+                <img src="./IMG_0954.jpg" alt="Avatar Zuma" class="about-avatar">
+                <div class="about-text">
+                    <p>
+                        Je suis <span>Zuma</span>, développeur passionné avec <span>6 ans d'expérience</span> dans la création de scripts, bots et outils sur mesure.
+                    </p>
+                    <p>
+                        La programmation est avant tout une <span>passion</span> pour moi. Chaque projet est une nouvelle occasion d'apprendre, d'expérimenter et de repousser mes limites techniques.
+                    </p>
+                    <p>
+                        Je me spécialise principalement dans l'écosystème <span>FiveM</span>, le développement de <span>bots Discord</span> et la création d'outils web — toujours avec le souci du détail et de la qualité.
+                    </p>
+                </div>
+                <div class="skills-list">
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name">JavaScript</span>
+                            <span class="skill-percent">90%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="90"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name">Lua</span>
+                            <span class="skill-percent">88%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="88"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name">Python</span>
+                            <span class="skill-percent">80%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="80"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name">PHP</span>
+                            <span class="skill-percent">72%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="72"></div></div>
+                    </div>
+                    <div class="skill-item">
+                        <div class="skill-header">
+                            <span class="skill-name">HTML / CSS</span>
+                            <span class="skill-percent">85%</span>
+                        </div>
+                        <div class="skill-bar"><div class="skill-bar-fill" data-width="85"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tarifs">
+        <div class="tarifs-section">
+            <div class="section-header">
+                <div class="section-label">Tarifs</div>
+                <h2 class="section-title">Mes prestations</h2>
+            </div>
+            <div class="tarifs-grid">
+
+                <div class="tarif-card featured">
+                    <div class="tarif-badge">Populaire</div>
+                    <div class="tarif-icon">🤖</div>
+                    <div class="tarif-title">Bot Discord</div>
+                    <div class="tarif-price">25€ <span>/ projet</span></div>
+                    <ul class="tarif-features">
+                        <li>Commandes personnalisées</li>
+                        <li>Modération automatique</li>
+                        <li>Système de tickets, niveaux...</li>
+                        <li>Support actif inclus</li>
+                        <li>Livraison rapide</li>
+                    </ul>
+                    <a href="#contact" class="tarif-cta">Démarrer →</a>
+                </div>
+
+                <div class="tarif-card">
+                    <div class="tarif-icon">🎮</div>
+                    <div class="tarif-title">Script FiveM</div>
+                    <div class="tarif-price">10€ – 100€ <span>/ script</span></div>
+                    <ul class="tarif-features">
+                        <li>Prix selon complexité</li>
+                        <li>Prix selon la demande du client</li>
+                        <li>Scripts Lua optimisés</li>
+                        <li>Compatible ESX / QBCore</li>
+                        <li>Intégration MySQL</li>
+                    </ul>
+                    <a href="#contact" class="tarif-cta">Demander un devis →</a>
+                </div>
+
+                <div class="tarif-card">
+                    <div class="tarif-icon">🏙️</div>
+                    <div class="tarif-title">Base FiveM</div>
+                    <div class="tarif-price">Sur devis <span>/ projet</span></div>
+                    <ul class="tarif-features">
+                        <li>Serveur FiveM complet sur mesure</li>
+                        <li>Prix selon la demande du client</li>
+                        <li>Scripts, jobs, économie, inventaire...</li>
+                        <li>Compatible ESX / QBCore</li>
+                        <li>Suivi & accompagnement inclus</li>
+                    </ul>
+                    <a href="#contact" class="tarif-cta">Demander un devis →</a>
+                </div>
+
+                <div class="tarif-card">
+                    <div class="tarif-icon">⛏️</div>
+                    <div class="tarif-title">Plugin Minecraft</div>
+                    <div class="tarif-price">10€ – 100€ <span>/ plugin</span></div>
+                    <ul class="tarif-features">
+                        <li>Prix selon complexité</li>
+                        <li>Prix selon la demande du client</li>
+                        <li>Compatible Spigot / Paper</li>
+                        <li>Livraison des fichiers sources</li>
+                    </ul>
+                    <a href="#contact" class="tarif-cta">Demander un devis →</a>
+                </div>
+
+                <div class="tarif-card">
+                    <div class="tarif-icon">🏰</div>
+                    <div class="tarif-title">Base Minecraft</div>
+                    <div class="tarif-price">Sur devis <span>/ projet</span></div>
+                    <ul class="tarif-features">
+                        <li>Serveur Minecraft complet sur mesure</li>
+                        <li>Prix selon la demande du client</li>
+                        <li>Plugins, quêtes, économie...</li>
+                        <li>Compatible Spigot / Paper</li>
+                        <li>Suivi & accompagnement inclus</li>
+                    </ul>
+                    <a href="#contact" class="tarif-cta">Demander un devis →</a>
+                </div>
+
+                <div class="tarif-card">
+                    <div class="tarif-icon">🔧</div>
+                    <div class="tarif-title">Tools</div>
+                    <div class="tarif-price">15€ <span>/ outil</span></div>
+                    <ul class="tarif-features">
+                        <li>Outils personnalisés sur mesure</li>
+                        <li>Scripts utilitaires</li>
+                        <li>Automatisation de tâches</li>
+                        <li>Livraison des fichiers sources</li>
+                    </ul>
+                    <a href="#contact" class="tarif-cta">Démarrer →</a>
+                </div>
+
+                <div class="tarif-card">
+                    <div class="tarif-icon">🌐</div>
+                    <div class="tarif-title">Site Web</div>
+                    <div class="tarif-price">35€ <span>/ projet</span></div>
+                    <ul class="tarif-features">
+                        <li>Design moderne & responsive</li>
+                        <li>HTML / CSS / JavaScript</li>
+                        <li>Optimisé et rapide</li>
+                        <li>Livraison des fichiers sources</li>
+                    </ul>
+                    <a href="#contact" class="tarif-cta">Démarrer →</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="section">
+            <div class="contact-content">
+                <div class="section-label">Contact</div>
+                <h2 class="contact-title">Un projet en tête ?</h2>
+                <p class="hero-description">
+                    Besoin d'un script FiveM, d'un bot Discord ou d'un outil web personnalisé ? Discutons-en.
+                </p>
+                <form class="contact-form" id="contactForm" action="https://formspree.io/f/xqeyrgar" method="POST">
+                    <div class="form-row">
+                        <div class="form-field">
+                            <label for="name">Nom</label>
+                            <input type="text" id="name" name="name" placeholder="Ton pseudo" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="ton@email.com" required>
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label for="subject">Sujet</label>
+                        <input type="text" id="subject" name="subject" placeholder="Script FiveM, Bot Discord...">
+                    </div>
+                    <div class="form-field">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" placeholder="Décris ton projet..." required></textarea>
+                    </div>
+                    <input type="hidden" name="_replyto" value="zuma.developpement@gmail.com">
+                    <input type="hidden" name="_subject" value="Nouveau message depuis le portfolio Zuma">
+                    <button type="submit" class="form-submit">Envoyer le message →</button>
+                    <div class="form-success" id="formSuccess">✓ Message envoyé ! Je te réponds rapidement.</div>
+                </form>
+                <div class="social-links">
+                    <a href="https://discord.gg/gBCHZ4rtht" target="_blank" class="social-link">Discord</a>
+                    <a href="#" class="social-link">GitHub</a>
+                    <a href="#" class="social-link">Portfolio</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <button id="back-to-top" title="Retour en haut">↑</button>
+
+    <footer>
+        <p>© 2026 Zuma Développement. Fait avec passion.</p>
+    </footer>
+
+    <script>
+        // Back to top
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('visible', window.scrollY > 400);
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Contact form
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('.form-submit');
+            const success = document.getElementById('formSuccess');
+            btn.textContent = 'Envoi en cours...';
+            btn.disabled = true;
+            try {
+                const res = await fetch(this.action, {
+                    method: 'POST',
+                    body: new FormData(this),
+                    headers: { 'Accept': 'application/json' }
+                });
+                if (res.ok) {
+                    success.style.display = 'block';
+                    this.reset();
+                    setTimeout(() => { success.style.display = 'none'; }, 5000);
+                } else {
+                    alert('Erreur lors de l\'envoi. Réessaie ou contacte-moi sur Discord.');
+                }
+            } catch {
+                alert('Erreur réseau. Vérifie ta connexion.');
+            }
+            btn.textContent = 'Envoyer le message →';
+            btn.disabled = false;
+        });
+
+        // Skill bars animation on scroll
+        const bars = document.querySelectorAll('.skill-bar-fill');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.width = entry.target.dataset.width + '%';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        bars.forEach(bar => observer.observe(bar));
+
+        const canvas = document.getElementById('code-bg');
+        const ctx = canvas.getContext('2d');
+
+        const codeLines = [
+            'function onPlayerSpawn(source)',
+            'local player = ESX.GetPlayerFromId',
+            'TriggerClientEvent("esx:playerLoaded"',
+            'RegisterNetEvent("myScript:sync")',
+            'MySQL.Async.fetchAll("SELECT *',
+            'exports["es_extended"]:getSharedObject',
+            'AddEventHandler("playerConnecting"',
+            'client.on("interactionCreate"',
+            'const { SlashCommandBuilder } = require',
+            'message.reply({ embeds: [embed] })',
+            'interaction.reply({ ephemeral: true })',
+            'db.query("INSERT INTO players VALUES"',
+            'bot.login(process.env.TOKEN)',
+            'const embed = new EmbedBuilder()',
+            '.setTitle("FlashDream FA")',
+            '.setColor(0x00FF94)',
+            'guild.members.fetch(userId)',
+            'if (player.job.name === "police")',
+            'TriggerEvent("esx:setJob", source',
+            'exports.oxmysql:execute("UPDATE"',
+            'RegisterCommand("duty", function',
+            'citizen.trace("^2[FlashDream]^7"',
+            'local coords = GetEntityCoords',
+            'SetEntityCoords(ped, x, y, z)',
+            'NetworkGetNetworkIdFromEntity',
+            'while true do Wait(0) end',
+            'CreateThread(function()',
+            'AddBlip(GetEntityCoords(ped))',
+            'require("discord.js").Client',
+            'mongoose.connect(process.env.DB',
+            'app.get("/api/players", async',
+            'res.json({ status: "ok" })',
+            'const schema = new Schema({',
+            'module.exports = { execute }',
+            'client.commands.set(cmd.data.name',
+        ];
+
+        const fontSize = 13;
+        const colWidth = 340;
+        let columns = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const numCols = Math.ceil(canvas.width / colWidth) + 1;
+            columns = [];
+            for (let i = 0; i < numCols; i++) {
+                columns.push({
+                    x: i * colWidth,
+                    y: Math.random() * -canvas.height,
+                    speed: 0.4 + Math.random() * 0.5,
+                    lines: shuffleLines(),
+                    lineIndex: 0,
+                    lineSpacing: fontSize * 2.2,
+                });
+            }
+        }
+
+        function shuffleLines() {
+            return [...codeLines].sort(() => Math.random() - 0.5);
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = `${fontSize}px 'JetBrains Mono', monospace`;
+            ctx.fillStyle = '#00FF94';
+            ctx.textAlign = 'left';
+
+            for (const col of columns) {
+                col.y += col.speed;
+                let drawY = col.y;
+                for (let i = 0; i < col.lines.length; i++) {
+                    if (drawY > canvas.height + 40) break;
+                    if (drawY > -fontSize) {
+                        ctx.fillText(col.lines[i], col.x, drawY);
+                    }
+                    drawY += col.lineSpacing;
+                }
+                if (col.y > canvas.height + col.lines.length * col.lineSpacing) {
+                    col.y = Math.random() * -200 - 100;
+                    col.lines = shuffleLines();
+                    col.speed = 0.4 + Math.random() * 0.5;
+                }
+            }
+            requestAnimationFrame(draw);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        draw();
+    </script>
+</body>
+</html>
