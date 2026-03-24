@@ -130,6 +130,35 @@
             z-index: 1;
         }
 
+        .availability-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 148, 0.08);
+            border: 1px solid rgba(0, 255, 148, 0.3);
+            border-radius: 99px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards 0.1s;
+        }
+
+        .availability-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; box-shadow: 0 0 6px var(--accent); }
+            50% { opacity: 0.3; box-shadow: none; }
+        }
+
         .hero-label {
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
@@ -831,6 +860,10 @@
 
     <section class="hero">
         <div class="hero-content">
+            <div class="availability-badge">
+                <span class="availability-dot"></span>
+                Disponible aux commissions
+            </div>
             <div class="hero-label">Zuma Développement</div>
             <h1>
                 <span class="gradient-text">Hub Développement</span>
